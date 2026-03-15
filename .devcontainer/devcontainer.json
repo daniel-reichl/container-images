@@ -1,0 +1,101 @@
+// https://aka.ms/devcontainer.json
+{
+  // Configuration for the dev container
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "hostRequirements": {
+    "cpus": 4
+  },
+  // Features to add to the dev container (https://containers.dev/features)
+  "features": {
+    "ghcr.io/devcontainers/features/github-cli": {},
+    "ghcr.io/devcontainers/features/node": {
+      "version": "24",
+      "installPnpm": true
+    },
+    "ghcr.io/devcontainers/features/python": {
+      "version": "3.12",
+      "installTools": false
+    },
+    "ghcr.io/devcontainers-extra/features/uv": {},
+    "ghcr.io/kreemer/features/chrometesting": {}
+  },
+  // Enable container to access host X11 and Wayland for GUI apps
+  "runArgs": [
+    "--ipc=host" // share IPC for some GUI toolkits
+  ],
+  "mounts": [
+    "source=/mnt/wslg,target=/mnt/wslg,type=bind,consistency=cached", // WSLg Wayland/Pulse bundle
+    "source=/tmp/.X11-unix,target=/tmp/.X11-unix,type=bind" // X11 socket for XWayland
+  ],
+  "containerEnv": {
+    "DISPLAY": "${localEnv:DISPLAY}",
+    "WAYLAND_DISPLAY": "${localEnv:WAYLAND_DISPLAY}",
+    "XDG_RUNTIME_DIR": "${localEnv:XDG_RUNTIME_DIR}",
+    "PULSE_SERVER": "${localEnv:PULSE_SERVER}"
+  },
+  // IDE Extensions
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "amodio.toggle-excluded-files",
+        "dotenv.dotenvx-vscode",
+        "GitHub.copilot-chat",
+        "logerfo.open-all-files",
+        "mhutchie.git-graph",
+        "ms-python.python",
+        "-dbaeumer.vscode-eslint",
+        "-ms-python.autopep8"
+      ],
+      "settings": {
+        "git.autofetch": true,
+        "git.confirmSync": false,
+        "editor.emptySelectionClipboard": true,
+        "editor.formatOnSave": true,
+        "editor.rulers": [
+          88
+        ],
+        "editor.tabSize": 2,
+        "editor.wordWrapColumn": 88,
+        "explorer.sortOrder": "filesFirst",
+        "explorer.fileNesting.enabled": true,
+        "explorer.fileNesting.patterns": {
+          "README.md": "*"
+        },
+        "explorer.sortOrderLexicographicOptions": "upper",
+        "files.associations": {
+          "*.env.*": "dotenv",
+          "*.trex": "xml"
+        },
+        "python.analysis.typeCheckingMode": "basic",
+        "python.analysis.diagnosticMode": "openFilesOnly",
+        "python.terminal.activateEnvironment": false,
+        "[python]": {
+          "editor.tabSize": 4,
+          "editor.codeActionsOnSave": {
+            "source.fixAll": "explicit",
+            "source.organizeImports": "explicit"
+          }
+        },
+        "[svelte]": {
+          "editor.quickSuggestions": {
+            "strings": "on"
+          }
+        },
+        "[vue]": {
+          "editor.quickSuggestions": {
+            "strings": "on"
+          }
+        },
+        "[css]": {
+          "editor.quickSuggestions": {
+            "strings": "on"
+          }
+        },
+        "extensions.ignoreRecommendations": true,
+        "workbench.remoteIndicator.showExtensionRecommendations": false
+      }
+    }
+  }
+}

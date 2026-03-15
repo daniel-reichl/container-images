@@ -1,0 +1,8 @@
+services:
+  devcontainer:
+    image: ghcr.io/daniel-reichl/devcontainer:latest
+    environment:
+      UV_CACHE_DIR: /ws/.cache/uv
+    volumes:
+      - ../:/ws:cached
+    command: sleep infinity

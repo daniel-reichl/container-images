@@ -1,0 +1,35 @@
+name: Build
+on:
+  push:
+    branches: [main]
+    paths: ['.devcontainer/**', 'scripts/**']
+  workflow_dispatch:
+
+env:
+  IMAGE: ghcr.io/daniel-reichl/devcontainer
+
+permissions:
+  contents: read
+  packages: write # Required to push to GHCR
+  actions: read # Required to download actions
+
+jobs:
+  build-devcontainer:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Login to GHCR
+        uses: docker/login-action@v4
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Pre-build dev container image
+        uses: devcontainers/ci@v0.3
+        with:
+          imageName: ${{ env.IMAGE }}
+          cacheFrom: ${{ env.IMAGE }}
+          push: always
