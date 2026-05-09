@@ -1,0 +1,39 @@
+# Environment
+*.env.keys
+
+# Logs
+*.log
+*.log.*
+core.*
+wget-log
+
+# Build
+**/bin/
+**/build/
+**/coverage/
+**/dist/
+**/obj/
+
+# macOS system files
+_MACOSX/
+.DS_Store
+.DS_Store?
+
+# Windows system files
+ehthumbs.db
+Thumbs.db
+
+# macOS indexing & trash files
+.Spotlight-V100
+.Trashes
+
+# Node
+node_modules/
+.pnpm-store/
+.tsbuildinfo
+
+# Python
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+.venv/
