@@ -1,0 +1,16 @@
+// https://aka.ms/devcontainer.json
+{
+  "name": "CONTAINER NAME",
+  "dockerComposeFile": "docker-compose.yaml",
+  "service": "devcontainer",
+  "workspaceFolder": "/ws",
+  "postCreateCommand": "task install",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "biomejs.biome",
+        "charliermarsh.ruff"
+      ]
+    }
+  }
+}

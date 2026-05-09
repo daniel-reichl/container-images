@@ -1,0 +1,29 @@
+{
+  "editor.codeActionsOnSave": {
+    "source.fixAll.biome": "explicit"
+  },
+  "editor.defaultFormatter": "biomejs.biome",
+  "files.associations": {
+    "*.css": "tailwindcss"
+  },
+  "python.analysis.ignore": [
+    "*"
+  ],
+  "python.analysis.fixAll": [
+    "source.fixAll.ruff"
+  ],
+  "python.terminal.activateEnvironment": false,
+  "tailwindCSS.classAttributes": [
+    "class",
+    "ui"
+  ],
+  "tailwindCSS.classFunctions": [
+    "tv"
+  ],
+  "tailwindCSS.experimental.classRegex": [
+    "ui:\\s*{([^)]*)\\s*}",
+    "(?:'|\"|`)([^']*)(?:'|\"|`)"
+  ],
+  "tailwindCSS.lint.cssConflict": "ignore",
+  "extensions.ignoreRecommendations": true
+}

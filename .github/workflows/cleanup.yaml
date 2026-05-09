@@ -1,0 +1,41 @@
+# packages-cleanup.yaml
+# Runs on a weekly schedule to prune old container images from GHCR.
+
+name: Cleanup
+
+on:
+  schedule:
+    - cron: '0 3 * * *'
+      timezone: 'America/Chicago'
+  workflow_dispatch:
+
+jobs:
+  # ─────────────────────────────────────────────────────────────
+  # Delete old and untagged images from GHCR
+  # ─────────────────────────────────────────────────────────────
+  cleanup:
+    name: Cleanup Images (${{ matrix.image }})
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+    strategy:
+      matrix:
+        image:
+          - devcontainer
+          - tools
+    steps:
+      - name: Delete untagged ${{ matrix.image }} images
+        uses: actions/delete-package-versions@v5
+        with:
+          package-name: ${{ matrix.image }}
+          package-type: container
+          delete-only-untagged-versions: true
+          min-versions-to-keep: 0
+
+      - name: Delete old tagged ${{ matrix.image }} images
+        uses: actions/delete-package-versions@v5
+        with:
+          package-name: ${{ matrix.image }}
+          package-type: container
+          min-versions-to-keep: 15
+          delete-only-untagged-versions: false

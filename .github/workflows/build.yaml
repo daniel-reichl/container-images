@@ -1,0 +1,71 @@
+name: Build
+on:
+  push:
+    branches: [main]
+    paths: ['package/**']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write # Required to push to GHCR
+  actions: read # Required to download actions
+
+jobs:
+  metadata:
+    runs-on: ubuntu-latest
+    outputs:
+      timestamp: ${{ steps.date.outputs.timestamp }}
+      datestamp: ${{ steps.date.outputs.datestamp }}
+    steps:
+      - name: Generate date tags
+        id: date
+        run: |
+          echo "datestamp=$(date +'%Y%m%d')" >> $GITHUB_OUTPUT
+          echo "timestamp=$(date +'%Y%m%d%H%M')" >> $GITHUB_OUTPUT
+
+  build-tools:
+    runs-on: ubuntu-latest
+    needs: metadata
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Login to GHCR
+        uses: docker/login-action@v4
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push tools image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: package/tools/Dockerfile
+          push: true
+          tags: |
+            ghcr.io/daniel-reichl/tools:latest
+            ghcr.io/daniel-reichl/tools:${{ needs.metadata.outputs.datestamp }}
+            ghcr.io/daniel-reichl/tools:${{ needs.metadata.outputs.timestamp }}
+
+  build-devcontainer:
+    runs-on: ubuntu-latest
+    needs: [metadata, build-tools]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Login to GHCR
+        uses: docker/login-action@v4
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Pre-build dev container image
+        uses: devcontainers/ci@v0.3
+        with:
+          imageName: ghcr.io/daniel-reichl/devcontainer
+          imageTag: latest,${{ needs.metadata.outputs.datestamp }},${{ needs.metadata.outputs.timestamp }}
+          cacheFrom: ghcr.io/daniel-reichl/devcontainer
+          push: always

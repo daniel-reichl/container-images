@@ -1,0 +1,15 @@
+{
+  "git.autofetch": true,
+  "git.confirmSync": false,
+  "editor.emptySelectionClipboard": true,
+  "editor.formatOnSave": true,
+  "editor.tabSize": 2,
+  "editor.wordWrapColumn": 88,
+  "explorer.sortOrder": "filesFirst",
+  "explorer.fileNesting.enabled": true,
+  "explorer.fileNesting.patterns": {
+    "README.md": "*"
+  },
+  "explorer.sortOrderLexicographicOptions": "upper",
+  "extensions.ignoreRecommendations": true
+}
